@@ -1,7 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Builder </title>
+    <link rel="stylesheet" href="style/style.css">
+</head>
 <body>
-<h1>ciaooo</h1>
-<p>I'm hosted with GitHub Pages.</p>
+    <header>
+        <h1>Multi Leader Team Builder</h1>
+        Click on a character to set it as a leader.
+        <p></p>
+        All the characters that match both leaders will be displayed in the team section.
+        <p></p>
+        You can also filter the team's character using the filters for type and color.
+        <div id="filters">
+            <input type="text" id="nameFilter" placeholder="Search by name">
+            <fieldset>
+                <legend>Type</legend>
+                <label><input type="checkbox" value="Super" class="typeFilter"> Super</label>
+                <label><input type="checkbox" value="Extreme" class="typeFilter"> Extreme</label>
+            </fieldset>
+            <fieldset>
+                <legend>Color</legend>
+                <label><input type="checkbox" value="TEQ" class="colorFilter"> TEQ</label>
+                <label><input type="checkbox" value="STR" class="colorFilter"> STR</label>
+                <label><input type="checkbox" value="INT" class="colorFilter"> INT</label>
+                <label><input type="checkbox" value="PHY" class="colorFilter"> PHY</label>
+                <label><input type="checkbox" value="AGL" class="colorFilter"> AGL</label>
+            </fieldset>
+            <fieldset>
+                <legend>Categories</legend>
+                <select id="categoryList">
+                    <option value="">Select Categories</option>
+                </select>
+                <ul id="selectedCategories">
+                    <!-- dynamic -->
+                </ul>
+            </fieldset>
+        </div>
+    </header>
+    <div class="containers">
+        <main id="characterContainer"></main>
+        <main id="teamContainer">
+            <div id="teamHeader">
+                <div class="teamHeaderTitle">
+                    <h1>Leaders</h1>
+                    <label><input type="checkbox" id="leaderCheckbox">Use Type and Color Filters</label>
+                </div>
+                <div id="leader">
+                    <div class="leaders">
+                        <!-- dynamic -->
+                    </div>
+                </div>
+            </div>
+            <div class="teamTitle">
+                <h2>Possible Characters</h2>
+                <p><em>PS: Check if the leaders are in the Team!</em></p>
+            </div>
+            <div id="team">
+                <!-- dynamic -->
+            </div>
+        </main>
+    </div>
+    <div id="characterModal" class="modal hidden">
+        <div class="modal-content">
+            <div id="leaderSkillInfo">
+                <h3>Leader Skill Boosts:</h3>
+                <p id="leaderSkillDetails">No leader skill selected.</p>
+            </div>
+            <button id="setLeader1">Set as Leader 1</button>
+            <button id="setLeader2">Set as Leader 2</button>
+            <button id="openCharacterPage">Open Wiki Page</button>
+        </div>
+    </div>
+    <script src="scripts/query.js"></script>
+    <script src="scripts/main.js"></script>
 </body>
 </html>
