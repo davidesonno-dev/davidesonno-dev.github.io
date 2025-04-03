@@ -24,8 +24,21 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(response => response.json())
             .then(data => {
                 DATA = data;
-                displayCharacters();
+
+                // Populate the characterContainer with all cards once
+                DATA.forEach(character => {
+                    if (!character.data || !character.data.image) return;
+
+                    const charElement = document.createElement("div");
+                    charElement.id = character.id;
+                    charElement.className = "character-card";
+                    charElement.style.display = "block"; // Ensure all cards are initially visible
+                    const imageUrl = `data/images/${character.id}.png`;
+                    charElement.innerHTML = `<img data-src="${imageUrl}" alt="${character.data.name}" class="lazy-load" title="${character.data.name}">`;
+                    characterContainer.appendChild(charElement);
+                });
                 populateCategories();
+                lazyLoadImages(); // Trigger lazy load for all images
             })
             .catch(error => console.error("Error loading data:", error));
     }
@@ -39,25 +52,19 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-    function displayCharacters() {
-        characterContainer.innerHTML = "";
+    function applyFilters() {
         const filters = getFilters();
-        const results = queryData(DATA, filters);
-        
-        results.forEach(character => {
-            if (!character.data || !character.data.image) return;
+        const results = queryData(DATA, filters).map(character => character.id); // Get IDs of matching characters
 
-            const charElement = document.createElement("div");
-            charElement.id = character.id
-            charElement.className = "character-card";
-            // Use the local image path
-            const imageUrl = `data/images/${character.id}.png`;
-            charElement.innerHTML = `<img src="${imageUrl}" alt="${character.data.name}" class="lazy-load" title="${character.data.name}">`;
-            characterContainer.appendChild(charElement);
+        // Toggle the display of cards based on the query results
+        DATA.forEach(character => {
+            const card = document.getElementById(character.id);
+            if (card) {
+                card.style.display = results.includes(character.id) ? "block" : "none";
+            }
         });
-
-        lazyLoadImages(); // Trigger lazy load when new images are added
     }
+
     function displayTeam() {
         teamContainer.innerHTML = "";
         const notice = document.createElement("div");
@@ -74,8 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
         let results = queryDataForTeam(DATA, leader1Filters, leader2Filters);
         if (filterCheckbox.checked) {
             let allFilters = getFilters();
-            allFilters.category = [];
-            // allFilters.name = '';
             results = queryData(results, allFilters);
         }
 
@@ -86,13 +91,11 @@ document.addEventListener("DOMContentLoaded", () => {
             charElement.id = character.id;
             charElement.className = "character-card";
             const imageUrl = `data/images/${character.id}.png`;
-            charElement.innerHTML = `<img src="${imageUrl}" alt="${character.data.name}" class="lazy-load" title="${character.data.name}">`;
+            charElement.innerHTML = `<img data-src="${imageUrl}" alt="${character.data.name}" class="lazy-load" title="${character.data.name}">`;
             teamContainer.appendChild(charElement);
         });
 
         lazyLoadImages(); // Trigger lazy load when new images are added
-
-        // Add notice if any leader is missing
     }
 
     function populateCategories() {
@@ -112,25 +115,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Lazy Load using IntersectionObserver
+    let observer = null; // Store the observer globally
     function lazyLoadImages() {
-        const images = document.querySelectorAll(".lazy-load");
+        if (observer) observer.disconnect(); // Stop observing old elements
 
-        const observer = new IntersectionObserver((entries, observer) => {
+        observer = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const img = entry.target;
-                    if (!loadedImages.has(img.src)) {
-                        img.src = img.getAttribute("src"); // Set the image source to load
-                        loadedImages.add(img.src); // Add to the loaded set
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src; // Load image
+                        img.removeAttribute("data-src"); // Remove the data-src attribute after loading
                     }
-                    observer.unobserve(img); // Stop observing once the image is loaded
+                    observer.unobserve(img); // Stop observing once loaded
                 }
             });
         }, { threshold: 0.1 });
 
-        images.forEach(img => observer.observe(img)); // Observe each image
+        // Observe all images with the "lazy-load" class, even if they share the same data-src
+        document.querySelectorAll(".lazy-load").forEach(img => {
+            if (img.dataset.src) {
+                observer.observe(img);
+            }
+        });
     }
-
+        
     function updateSelectedCategories() {
         const selectedCategory = categoryList.value.trim();
         if (selectedCategory && !selectedCategories.querySelector(`#${CSS.escape(selectedCategory)}`)) {
@@ -145,10 +154,11 @@ document.addEventListener("DOMContentLoaded", () => {
             removeButton.addEventListener("click", () => {
                 selectedCategories.removeChild(li);
                 selected_categories = selected_categories.filter(cat => cat !== selectedCategory);
-                displayCharacters();
+                applyFilters();
             });
             li.appendChild(removeButton);
-            displayCharacters();
+            applyFilters();
+            displayTeam();
         }
     }
 
@@ -194,6 +204,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const existingLeader = leadersContainer.querySelector(`#${leaderId}`);
         if (existingLeader) {
             existingLeader.remove(); // Remove the existing leader card
+
+            // Add a slight delay to ensure the modal is properly closed
+            setTimeout(() => hideModal(), 0);
         }
 
         const character = DATA.find(char => char.id === characterId);
@@ -217,8 +230,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else {
                     leader2Filters = {categories: [], types: [], colors: []}; // Clear leader2 filters
                 }
-                // console.log("Leader1 Filters:", leader1Filters);
-                // console.log("Leader2 Filters:", leader2Filters);
+
+                // Add a slight delay to ensure the modal is properly closed
+                setTimeout(() => hideModal(), 0);
                 displayTeam();
             });
 
@@ -228,10 +242,6 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 leader2Filters = character.data.leader_skill || {categories: [], types: [], colors: []};
             }
-
-            // Log the updated filters
-            // console.log("Leader1 Filters:", leader1Filters);
-            // console.log("Leader2 Filters:", leader2Filters);
 
             displayTeam();
 
@@ -311,23 +321,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     fetchData();
-    categoryList.addEventListener("change",updateSelectedCategories)
+    categoryList.addEventListener("change", () => {
+        updateSelectedCategories();
+        applyFilters();
+    });
     nameFilter.addEventListener("input", () => {
-        displayCharacters:
+        applyFilters();
         displayTeam();
     });
-    typeFilters.forEach(filter => {
-        filter.addEventListener("change", () => {
-            displayCharacters();
-            displayTeam();
-        });
-    });
-    colorFilters.forEach(filter => {
-        filter.addEventListener("change", () => {
-            displayCharacters();
-            displayTeam();
-        });
-    });
+    typeFilters.forEach(filter => filter.addEventListener("change", () => {
+        applyFilters();
+        displayTeam();
+    }));
+    colorFilters.forEach(filter => filter.addEventListener("change", () => {
+        applyFilters();
+        displayTeam();
+    }));
     filterCheckbox.addEventListener("change", displayTeam);
 });
 
