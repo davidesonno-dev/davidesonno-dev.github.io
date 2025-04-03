@@ -1494,9 +1494,31 @@
     }
   },
   {
-    "id": -1,
+    "id": 12639,
     "url": "https://dbz-dokkanbattle.fandom.com/wiki/Energy_to_Fulfill_Ambitions_Babidi",
-    "data": null
+    "data": {
+      "name": "Babidi",
+      "image": "https://static.wikia.nocookie.net/dbz-dokkanbattle/images/b/bf/Card_1026390_thumb_apng.png",
+      "color": "INT",
+      "type": "Extreme",
+      "categories": [
+        "Extreme Class",
+        "Resurrected Warriors",
+        "Majin Buu Saga",
+        "Terrifying Conquerors",
+        "Inhuman Deeds",
+        "Corroded Body and Mind",
+        "Uncontrollable Power",
+        "Demonic Power"
+      ],
+      "leader_skill": {
+        "categories": [
+          "Inhuman Deeds"
+        ],
+        "types": [],
+        "colors": []
+      }
+    }
   },
   {
     "id": "1747",
@@ -16995,7 +17017,7 @@
     }
   },
   {
-    "id": "12725",
+    "id": "12726",
     "url": "https://dbz-dokkanbattle.fandom.com/wiki/Half_a_Lifetime_for_Revenge_Paragus",
     "data": {
       "name": "Paragus",
@@ -29060,9 +29082,36 @@
     }
   },
   {
-    "id": -1,
+    "id": "12725",
     "url": "https://dbz-dokkanbattle.fandom.com/wiki/The_Result_of_Time_Traveling_Trunks_(Teen)_(Future)",
-    "data": null
+    "data": {
+      "name": "Trunks (Teen) (Future)",
+      "image": "https://static.wikia.nocookie.net/dbz-dokkanbattle/images/2/2b/Card_1027250_thumb.png/revision/latest/scale-to-width-down/120?cb=20230907140618",
+      "color": "INT",
+      "type": "Super",
+      "categories": [
+        "Super Class",
+        "Hybrid Saiyans",
+        "Future Saga",
+        "Time Travelers",
+        "Vegeta's Family",
+        "Android/Cell Saga",
+        "Bond of Master and Disciple",
+        "Revenge",
+        "Battle of Wits",
+        "Entrusted Will",
+        "Bond of Parent and Child",
+        "Earth-Bred Fighters",
+        "Earth-Protecting Heroes"
+      ],
+      "leader_skill": {
+        "categories": [
+          "Future Saga"
+        ],
+        "types": [],
+        "colors": []
+      }
+    }
   },
   {
     "id": "1544",
@@ -32459,7 +32508,7 @@
       "name": "Hercule Statue (Diamond)",
       "image": "https://static.wikia.nocookie.net/dbz-dokkanbattle/images/d/da/Card_1011480_thumb.png/revision/latest/scale-to-width-down/120?cb=20170706162051",
       "color": "PHY",
-      "type": null,
+      "type": "Super",
       "categories": [
         "None"
       ],

@@ -2,6 +2,10 @@ let DATA;
 let selected_categories = [];
 let leader1Filters = {categories:[], types:[],colors:[]}; // Variable to store leader1 filters
 let leader2Filters = {categories:[], types:[],colors:[]}; // Variable to store leader2 filters
+// const CDNUrl = 'https://cdn.jsdelivr.net/gh/davidesonno-dev/davidesonno-dev.github.io/'
+// const CDNUrl = 'https://raw.githubusercontent.com/davidesonno-dev/davidesonno-dev.github.io/main/'
+const CDNUrl = ''
+const imagesFolder = 'images.small'
 
 document.addEventListener("DOMContentLoaded", () => {
     const nameFilter = document.getElementById("nameFilter");
@@ -33,8 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     charElement.id = character.id;
                     charElement.className = "character-card";
                     charElement.style.display = "block"; // Ensure all cards are initially visible
-                    const imageUrl = `data/images/${character.id}.png`;
-                    charElement.innerHTML = `<img data-src="${imageUrl}" alt="${character.data.name}" class="lazy-load" title="${character.data.name}">`;
+                    const imageUrl = `data/${imagesFolder}/${character.id}.png`;
+                    charElement.innerHTML = `<img data-src="${CDNUrl}${imageUrl}" alt="${character.data.name}" class="lazy-load" title="${character.data.name}">`;
                     characterContainer.appendChild(charElement);
                 });
                 populateCategories();
@@ -90,8 +94,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const charElement = document.createElement("div");
             charElement.id = character.id;
             charElement.className = "character-card";
-            const imageUrl = `data/images/${character.id}.png`;
-            charElement.innerHTML = `<img data-src="${imageUrl}" alt="${character.data.name}" class="lazy-load" title="${character.data.name}">`;
+            const imageUrl = `data/${imagesFolder}/${character.id}.png`;
+            charElement.innerHTML = `<img data-src="${CDNUrl}${imageUrl}" alt="${character.data.name}" class="lazy-load" title="${character.data.name}">`;
             teamContainer.appendChild(charElement);
         });
 
@@ -215,9 +219,9 @@ document.addEventListener("DOMContentLoaded", () => {
             leaderCard.id = leaderId; // Use the correct leader ID
             leaderCard.className = "character-card";
             leaderCard.setAttribute("card_id", characterId); // Add card_id attribute
-            const imageUrl = `data/images/${characterId}.png`;
+            const imageUrl = `data/${imagesFolder}/${characterId}.png`;
             leaderCard.innerHTML = `
-                <img src="${imageUrl}" alt="${character.data.name}" title="${character.data.name}">
+                <img src="${CDNUrl}${imageUrl}" alt="${character.data.name}" title="${character.data.name}">
                 <span class="leader-label">Leader ${leaderIndex}</span>
                 <button class="remove-leader" data-leader-id="${leaderId}">Remove</button>
             `;
